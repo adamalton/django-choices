@@ -9,6 +9,11 @@ A handy class for creating "choices" objects, primarily for use in Django
 Essentially you just wrap a normal iterable of (value, label) pairs in the `Choices` class.
 
 ```
+my_choices = Choices([
+    ('BLUE', 'Blue'),
+    ('BANANA', 'Banana'),
+    ('THING', 'Some Thing'),
+])
 
 ```
 
@@ -31,7 +36,7 @@ MY_CHOICES = Choices([
 ])
 
 class MyModel(models.Model):
-    
+
     decision = models.CharField(
         choices=MY_CHOICES.choices,
         default=MY_CHOICES.YES
