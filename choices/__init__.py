@@ -14,6 +14,8 @@ class Choices(object):
         assert 'choices' not in self._choices.keys()
         assert 'constants' not in self._choices.keys()
 
+        # Sanity check to make sure there are no conflicting constants
+        # once spaces and hyphens have been removed
         seen_lookups = set()
         for constant, _ in choices:
             sanitized = constant.replace("-", "_").replace(" ", "_")
