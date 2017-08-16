@@ -21,7 +21,7 @@ class Choices(object):
 
                 # Check if the name is a Python keyword, builtin or an integer
                 # if it is, we allow access with a leading underscore, but if not
-                # we fall through an throw the normal key error
+                # we fall through and throw the normal KeyError
                 special = False
                 try:
                     int(without_underscore)
