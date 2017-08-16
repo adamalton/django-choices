@@ -14,6 +14,14 @@ class Choices(object):
         assert 'choices' not in self._choices.keys()
         assert 'constants' not in self._choices.keys()
 
+        seen_lookups = set()
+        for constant, _ in choices:
+            sanitized = constant.replace("-", "_").replace(" ", "_")
+            if sanitized in seen_lookups:
+                raise ValueError("Attempted to add conflicting option {}".format(constant))
+            else:
+                seen_lookups.add(sanitized)
+
     def __getattr__(self, name):
         try:
             if name.startswith("_") and name[1:] in self._choices:

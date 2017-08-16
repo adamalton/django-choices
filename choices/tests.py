@@ -25,6 +25,9 @@ class ChoicesTestCase(unittest.TestCase):
         self.assertEqual(special.en_GB, "en-GB")
         self.assertEqual(special.my_thing, "my thing")
 
+        # Check that we don't allow conflicting choices
+        self.assertRaises(ValueError, Choices, [("en-GB", "1"), ("en_GB", "2")])
+
     def test_python_keywords_and_numbers(self):
         special = Choices([
             ("id", "ID"),
