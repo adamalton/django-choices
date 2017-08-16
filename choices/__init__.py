@@ -35,7 +35,7 @@ class Choices(object):
 
             if name not in self._choices:
                 # Another special case, if we have spaces or hyphens, provide
-                # access using underscores in place
+                # access using underscores in their place
                 for k in self._choices:
                     if k.replace("-", "_").replace(" ", "_") == name:
                         return k
