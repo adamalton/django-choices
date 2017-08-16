@@ -43,7 +43,7 @@ class Choices(object):
             self._choices[name] #check it exists
             return name
         except KeyError:
-            return super(Choices, self).__getattr__(name)
+            raise AttributeError("Choices object has no such attribute {}".format(name))
 
     def __setattr__(self, name, value):
         """ Prevent values being changed. """
