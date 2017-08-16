@@ -18,6 +18,10 @@ class Choices(object):
         try:
             if name.startswith("_") and name[1:] in self._choices:
                 without_underscore = name[1:]
+
+                # Check if the name is a Python keyword, builtin or an integer
+                # if it is, we allow access with a leading underscore, but if not
+                # we fall through an throw the normal key error
                 special = False
                 try:
                     int(without_underscore)

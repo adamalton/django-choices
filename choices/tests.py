@@ -27,6 +27,8 @@ class ChoicesTestCase(unittest.TestCase):
         self.assertEqual(special._id, "id")
         self.assertEqual(special._1, "1")
         self.assertEqual(special._in, "in")
+
+        # Underscore access should only work for keywords and numbers
         self.assertRaises(AttributeError, getattr, special, "_xx")
 
     def test_choices_property(self):
