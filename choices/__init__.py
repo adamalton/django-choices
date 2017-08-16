@@ -33,6 +33,13 @@ class Choices(object):
                 if special:
                     return without_underscore
 
+            if name not in self._choices:
+                # Another special case, if we have spaces or hyphens, provide
+                # access using underscores in place
+                for k in self._choices:
+                    if k.replace("-", "_").replace(" ", "_") == name:
+                        return k
+
             self._choices[name] #check it exists
             return name
         except KeyError:

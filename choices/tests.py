@@ -16,6 +16,15 @@ class ChoicesTestCase(unittest.TestCase):
         self.assertEqual(colours.white, 'white')
         self.assertEqual(colours.black, 'black')
 
+    def test_hyphens_and_spaces(self):
+        special = Choices([
+            ("en-GB", "ID"),
+            ("my thing", "One"),
+        ])
+
+        self.assertEqual(special.en_GB, "en-GB")
+        self.assertEqual(special.my_thing, "my thing")
+
     def test_python_keywords_and_numbers(self):
         special = Choices([
             ("id", "ID"),
