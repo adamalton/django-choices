@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+import keyword
 
 #TODO: can we just sub-class tuple and be a tuple of tuples with attributes?
 class Choices(object):
@@ -16,6 +16,19 @@ class Choices(object):
 
     def __getattr__(self, name):
         try:
+            if name.startswith("_") and name[1:] in self._choices:
+                without_underscore = name[1:]
+                special = False
+                try:
+                    int(without_underscore)
+                    special = True
+                except (TypeError, ValueError):
+                    special = without_underscore in keyword.kwlist or \
+                              without_underscore in __builtins__.keys()
+
+                if special:
+                    return without_underscore
+
             self._choices[name] #check it exists
             return name
         except KeyError:

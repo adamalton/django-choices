@@ -16,6 +16,19 @@ class ChoicesTestCase(unittest.TestCase):
         self.assertEqual(colours.white, 'white')
         self.assertEqual(colours.black, 'black')
 
+    def test_python_keywords_and_numbers(self):
+        special = Choices([
+            ("id", "ID"),
+            ("1", "One"),
+            ("in", "IN"),
+            ("xx", "XX")
+        ])
+
+        self.assertEqual(special._id, "id")
+        self.assertEqual(special._1, "1")
+        self.assertEqual(special._in, "in")
+        self.assertRaises(AttributeError, getattr, special, "_xx")
+
     def test_choices_property(self):
         self.assertEqual(
             tuple(colours.choices),
