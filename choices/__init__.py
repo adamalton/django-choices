@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+import keyword
 
 #TODO: can we just sub-class tuple and be a tuple of tuples with attributes?
 class Choices(object):
@@ -14,12 +14,46 @@ class Choices(object):
         assert 'choices' not in self._choices.keys()
         assert 'constants' not in self._choices.keys()
 
+        # Sanity check to make sure there are no conflicting constants
+        # once spaces and hyphens have been removed
+        seen_lookups = set()
+        for constant, _ in choices:
+            sanitized = constant.replace("-", "_").replace(" ", "_")
+            if sanitized in seen_lookups:
+                raise ValueError("Attempted to add conflicting option {}".format(constant))
+            else:
+                seen_lookups.add(sanitized)
+
     def __getattr__(self, name):
         try:
+            if name.startswith("_") and name[1:] in self._choices:
+                without_underscore = name[1:]
+
+                # Check if the name is a Python keyword, builtin or an integer
+                # if it is, we allow access with a leading underscore, but if not
+                # we fall through and throw the normal KeyError
+                special = False
+                try:
+                    int(without_underscore)
+                    special = True
+                except (TypeError, ValueError):
+                    special = without_underscore in keyword.kwlist or \
+                              without_underscore in __builtins__.keys()
+
+                if special:
+                    return without_underscore
+
+            if name not in self._choices:
+                # Another special case, if we have spaces or hyphens, provide
+                # access using underscores in their place
+                for k in self._choices:
+                    if k.replace("-", "_").replace(" ", "_") == name:
+                        return k
+
             self._choices[name] #check it exists
             return name
         except KeyError:
-            return super(Choices, self).__getattr__(name)
+            raise AttributeError("Choices object has no such attribute {}".format(name))
 
     def __setattr__(self, name, value):
         """ Prevent values being changed. """

@@ -16,6 +16,33 @@ class ChoicesTestCase(unittest.TestCase):
         self.assertEqual(colours.white, 'white')
         self.assertEqual(colours.black, 'black')
 
+    def test_hyphens_and_spaces(self):
+        special = Choices([
+            ("en-GB", "ID"),
+            ("my thing", "One"),
+        ])
+
+        self.assertEqual(special.en_GB, "en-GB")
+        self.assertEqual(special.my_thing, "my thing")
+
+        # Check that we don't allow conflicting choices
+        self.assertRaises(ValueError, Choices, [("en-GB", "1"), ("en_GB", "2")])
+
+    def test_python_keywords_and_numbers(self):
+        special = Choices([
+            ("id", "ID"),
+            ("1", "One"),
+            ("in", "IN"),
+            ("xx", "XX")
+        ])
+
+        self.assertEqual(special._id, "id")
+        self.assertEqual(special._1, "1")
+        self.assertEqual(special._in, "in")
+
+        # Underscore access should only work for keywords and numbers
+        self.assertRaises(AttributeError, getattr, special, "_xx")
+
     def test_choices_property(self):
         self.assertEqual(
             tuple(colours.choices),
